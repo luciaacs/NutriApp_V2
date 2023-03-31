@@ -1,5 +1,7 @@
 package com.demo.nutri.model;
 
+import java.net.URI;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,7 +17,15 @@ public class Alimento {
     private Double grasas;
     private Double proteinas;
     private Double carbohidratos;
+    private String image; 
 
+
+    public String getImage() {
+        return image;
+    }
+    public void setImage(String image) {
+        this.image = image;
+    }
     public Integer getId() {
         return id;
     }

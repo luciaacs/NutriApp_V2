@@ -6,12 +6,15 @@ import javax.persistence.Id;
 @Entity
 public class Usuario {
     @Id
-    private String id;
+    private String nombreUsuario;
+    private String nombre;
+
+    public Usuario () { }
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((nombreUsuario == null) ? 0 : nombreUsuario.hashCode());
         return result;
     }
     @Override
@@ -23,33 +26,25 @@ public class Usuario {
         if (getClass() != obj.getClass())
             return false;
         Usuario other = (Usuario) obj;
-        if (id == null) {
-            if (other.id != null)
+        if (nombreUsuario == null) {
+            if (other.nombreUsuario != null)
                 return false;
-        } else if (!id.equals(other.id))
+        } else if (!nombreUsuario.equals(other.nombreUsuario))
             return false;
         return true;
     }
-    private String name;
-    private String email;
-    public String getId() {
-        return id;
+    public String getNombreUsuario() {
+        return nombreUsuario;
     }
-    public void setId(String id) {
-        this.id = id;
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
     }
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-}
 
- 
+    public String getNombre() {
+        return nombre;
+    }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+}
