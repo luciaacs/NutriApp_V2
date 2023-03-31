@@ -18,8 +18,15 @@ public class Alimento {
     private Double proteinas;
     private Double carbohidratos;
     private String image; 
+    private String nombreUsuario; 
 
 
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
     public String getImage() {
         return image;
     }
