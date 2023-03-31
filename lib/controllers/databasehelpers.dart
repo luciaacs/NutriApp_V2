@@ -7,7 +7,7 @@ import 'dart:convert';
 class DataBaseHelper{
 
 // Add
-  Future <http.Response> addAlimento(String nameController, double cantidadController,double caloriasController, double grasasController, double proteinasController, double carbohidratosController, String imageController) async {
+  Future <http.Response> addAlimento(String nameController, double cantidadController,double caloriasController, double grasasController, double proteinasController, double carbohidratosController, String imageController, String nombreUsuarioController) async {
     var url ="http://localhost:8080/foods/add";
     Map data={
       'name':nameController,
@@ -16,7 +16,8 @@ class DataBaseHelper{
       'grasas': '$grasasController',
       'proteinas': '$proteinasController',
       'carbohidratos': '$carbohidratosController',
-      'image': imageController
+      'image': imageController,
+      'nombreUsuario': nombreUsuarioController
     } ;
     var body =json.encode(data);
     var response = await http.post(Uri.parse(url),
