@@ -15,6 +15,8 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
   final TextEditingController grasasController = TextEditingController();
   final TextEditingController proteinasController = TextEditingController();
   final TextEditingController carbohidratosController = TextEditingController();
+  final TextEditingController imageController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +91,18 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
             decoration: InputDecoration(
               labelText: 'proteinas',
               hintText: 'Product proteinas',
-              icon: new Icon(Icons.place),
+              icon: new Icon(Icons.food_bank),
+            ),
+          ),
+        ),
+                Container(
+          height: 50,
+          child: TextField(
+            controller: imageController,
+            decoration: InputDecoration(
+              labelText: 'Image Link',
+              hintText: 'Link de la imagen del alimento',
+              icon: new Icon(Icons.link),
             ),
           ),
         ),
@@ -112,6 +125,7 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
                         double.parse(grasasController.text.trim()),
                         double.parse(proteinasController.text.trim()),
                         double.parse(carbohidratosController.text.trim()),
+                        imageController.text.trim()
                       );
                       Navigator.pop(context, true);
                     },

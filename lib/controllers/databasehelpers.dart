@@ -7,15 +7,16 @@ import 'dart:convert';
 class DataBaseHelper{
 
 // Add
-  Future <http.Response> addAlimento(String nameController, double cantidadController,double caloriasController, double grasasController, double proteinasController, double carbohidratosController) async {
-    var url ="http://192.168.1.51:8080/foods/add";
+  Future <http.Response> addAlimento(String nameController, double cantidadController,double caloriasController, double grasasController, double proteinasController, double carbohidratosController, String imageController) async {
+    var url ="http://localhost:8080/foods/add";
     Map data={
       'name':nameController,
       'cantidad':'$cantidadController',
       'calorias':'$caloriasController',
       'grasas': '$grasasController',
       'proteinas': '$proteinasController',
-      'carbohidratos': '$carbohidratosController'
+      'carbohidratos': '$carbohidratosController',
+      'image': imageController
     } ;
     var body =json.encode(data);
     var response = await http.post(Uri.parse(url),
@@ -24,5 +25,47 @@ class DataBaseHelper{
       print("${response.body}");
       return response;
   } 
-  
+
+  // Add
+  Future <http.Response> addUsuario(String nombreController, String nombreUsuarioController) async {
+    var url ="http://localhost:8080/users/add";
+    Map data={
+      'nombre':nombreController,
+      'nombreUsuario':nombreUsuarioController,
+    } ;
+    var body =json.encode(data);
+    print(body);
+    var response = await http.post(Uri.parse(url),
+      headers:{"Content-Type" : "application/json"}, body: body );
+      print("${response.statusCode}");
+      print("${response.body}");
+      return response;
+  } 
+
+   // Add
+  Future <http.Response> updateUsuario( String nombreController, String nombreUsuarioController) async {
+    var url ="http://localhost:8080/users/$nombreUsuarioController";
+    Map data={
+      'nombre':nombreController,
+      'nombreUsuario':nombreUsuarioController,
+    } ;
+    var body =json.encode(data);
+    var response = await http.put(Uri.parse(url),
+      headers:{"Content-Type" : "application/json"}, body: body );
+      print("${response.statusCode}");
+      print("${response.body}");
+      return response;
+  } 
+
+  // Delete
+  Future <http.Response> deleteAlimento(int id) async {
+    var url ="http://localhost:8080/foods/{id}";
+      var response = await http.delete(Uri.parse(url),
+        headers:{"Content-Type" : "application/json"} );
+        print("${response.statusCode}");
+        print("${response.body}");
+        return response;
+
+  } 
+
 }

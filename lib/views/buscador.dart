@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:my_app/views/mostrarFood.dart';
 
 class BuscadorComida extends StatefulWidget {
   @override
@@ -12,6 +13,8 @@ class BuscadorComida extends StatefulWidget {
 class _BuscadorComidaState extends State<BuscadorComida> {
   String _query = '';
   List<String> _foodList = [];
+  List<Map<String, dynamic>> _foods = [];
+
 
   final random = Random();
 
@@ -87,18 +90,43 @@ class _BuscadorComidaState extends State<BuscadorComida> {
                           trailing: IconButton(
                             icon: Icon(Icons.add),
                             onPressed: () {
+                                  insertarAlimento(
+                                  _foods[index]['label'],
+                                  _foods[index]['nutrients']['ENERC_KCAL'],
+                                  100, // 100 gramos de comida
+                                  _foods[index]['nutrients']['CHOCDF'],
+                                  _foods[index]['nutrients']['FAT'],
+                                  _foods[index]['nutrients']['PROCNT'],
+                                  _foods[index]['image'] ?? ""
+
+                                );
                               // Lógica para añadir el elemento
+                              // insertarAlimento(String _foods.label , double calorias, double cantidad, double carbohidratos, double grasas, double proteinas);
                             },
                           ),
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 8),
+                        margin: const EdgeInsets.only(top: 8),
                         child: ElevatedButton(
                           onPressed: () {
+                            print(_foods[index]['nutrients']['ENERC_KCAL'].runtimeType);
+                            print(_foods[index]['nutrients']['ENERC_KCAL']);
+
                             // Lógica para ver más detalles del elemento
-                          },
-                          child: Text('Ver'),
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MostrarFood(
+                                    name:  _foods[index]['label'],
+                                    cantidad: 100,
+                                    calorias : _foods[index]['nutrients']['ENERC_KCAL'],
+                                    grasas : _foods[index]['nutrients']['FAT'] ,                                 
+                                    proteinas : _foods[index]['nutrients']['PROCNT'],                             
+                                    carbohidratos : _foods[index]['nutrients']['CHOCDF']             
+                                  )));
+                           },
+                          child: const Text('Ver'),
                         ),
                       ),
                     ],
@@ -118,21 +146,43 @@ class _BuscadorComidaState extends State<BuscadorComida> {
     return await http.get(Uri.parse(url));
   }
 
-  Future<void> searchAndDisplayFood(String searchTerm) async {
-    var response = await searchFood(searchTerm);
+Future<void> searchAndDisplayFood(String searchTerm) async {
+  var response = await searchFood(searchTerm);
 
-    if (response.statusCode == 200) {
-      var body = json.decode(response.body);
-      var foodList =
-          body['hints'].map((food) => food['food']['label']).toList();
-      setState(() {
-        _foodList = foodList.cast<
-            String>(); // Conversión de lista dinámica a lista de cadenas de texto
-      });
-      // Mostrar lista de alimentos en la interfaz de usuario
-      // ...
-    } else {
-      print('Error al realizar la búsqueda');
-    }
+  if (response.statusCode == 200) {
+    var body = json.decode(response.body);
+    var foodList = body['hints'].map((food) => food['food']['label']).toList();
+    var foods = body['hints'].map((food) => food['food']).toList().cast<Map<String, dynamic>>();
+
+    setState(() {
+      _foodList = foodList.cast<String>(); // Convert foodList to List<String>
+      _foods = foods;
+      print(_foods[0]);
+    });
+    // Show food list in UI
+    // ...
+  } else {
+    print('Error al realizar la búsqueda');
   }
+}
+
+}
+
+Future<http.Response> insertarAlimento(String name, double calorias, double cantidad, double carbohidratos, double grasas, double proteinas, String image) async {
+  final response = await http.post(
+    Uri.parse('http://localhost:8080/foods/add'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, dynamic>{
+      'name': name,
+      'calorias': calorias,
+      'cantidad': cantidad,
+      'carbohidratos': carbohidratos,
+      'grasas': grasas,
+      'proteinas': proteinas,
+      'image' : image
+    }),
+  );
+  return response;
 }
