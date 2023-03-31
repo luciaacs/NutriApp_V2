@@ -66,6 +66,7 @@ public class AlimentoController {
             alimento.setCarbohidratos(Alimento.getCarbohidratos());
             alimento.setGrasas(Alimento.getGrasas());
             alimento.setProteinas(Alimento.getProteinas());
+            alimento.setImage(Alimento.getImage());
             repository.save(alimento);
             return ResponseEntity.ok().body(alimento);
         }).orElse(new ResponseEntity<Alimento>(HttpStatus.NOT_FOUND));
@@ -73,8 +74,8 @@ public class AlimentoController {
 
     @PostMapping("/insert")
     public ResponseEntity<Alimento> insertarAlimento(@RequestBody Alimento nuevoAlimento) {
-    Alimento alimentoGuardado = repository.save(nuevoAlimento);
-    return ResponseEntity.status(HttpStatus.CREATED).body(alimentoGuardado);
+            Alimento alimentoGuardado = repository.save(nuevoAlimento);
+            return ResponseEntity.status(HttpStatus.CREATED).body(alimentoGuardado);
 }
 
 
