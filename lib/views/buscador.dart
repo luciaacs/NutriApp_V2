@@ -6,6 +6,12 @@ import 'package:http/http.dart' as http;
 import 'package:my_app/views/mostrarFood.dart';
 
 class BuscadorComida extends StatefulWidget {
+  final String nombreUsuario;
+  
+  const BuscadorComida({
+    required this.nombreUsuario
+  });
+
   @override
   _BuscadorComidaState createState() => _BuscadorComidaState();
 }
@@ -97,7 +103,7 @@ class _BuscadorComidaState extends State<BuscadorComida> {
                                   _foods[index]['nutrients']['CHOCDF'],
                                   _foods[index]['nutrients']['FAT'],
                                   _foods[index]['nutrients']['PROCNT'],
-                                  _foods[index]['image'] ?? ""
+                                  _foods[index]['image'] ?? "",
 
                                 );
                               // Lógica para añadir el elemento
@@ -165,9 +171,6 @@ Future<void> searchAndDisplayFood(String searchTerm) async {
     print('Error al realizar la búsqueda');
   }
 }
-
-}
-
 Future<http.Response> insertarAlimento(String name, double calorias, double cantidad, double carbohidratos, double grasas, double proteinas, String image) async {
   final response = await http.post(
     Uri.parse('http://localhost:8080/foods/add'),
@@ -181,8 +184,12 @@ Future<http.Response> insertarAlimento(String name, double calorias, double cant
       'carbohidratos': carbohidratos,
       'grasas': grasas,
       'proteinas': proteinas,
-      'image' : image
+      'image' : image,
+      'nombreUsuario': widget.nombreUsuario
     }),
   );
   return response;
 }
+}
+
+

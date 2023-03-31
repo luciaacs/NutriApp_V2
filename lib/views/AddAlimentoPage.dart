@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:my_app/controllers/databasehelpers.dart';
 
 class AddAlimentoPage extends StatefulWidget {
+  final String nombreUsuario;
+  const AddAlimentoPage({
+    required this.nombreUsuario
+  });
+
+  
   @override
   _AddAlimentoPageState createState() => _AddAlimentoPageState();
 }
@@ -125,7 +131,8 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
                         double.parse(grasasController.text.trim()),
                         double.parse(proteinasController.text.trim()),
                         double.parse(carbohidratosController.text.trim()),
-                        imageController.text.trim()
+                        imageController.text.trim(),
+                        widget.nombreUsuario.trim(),
                       );
                       Navigator.pop(context, true);
                     },

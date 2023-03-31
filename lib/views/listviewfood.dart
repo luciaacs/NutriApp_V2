@@ -40,7 +40,7 @@ class _ListAlimentosState extends State<ListAlimentos> {
   }
 
   Future<List> getData() async {
-    final response = await http.get(Uri.parse("http://localhost:8080/foods"));
+    final response = await http.get(Uri.parse("http://localhost:8080/foods/user/${widget.nombreUsuario}"));
     return json.decode(response.body);
   }
 
@@ -60,7 +60,7 @@ class _ListAlimentosState extends State<ListAlimentos> {
 
   _navigateAddAlimento(BuildContext context) async {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => AddAlimentoPage()));
+        context, MaterialPageRoute(builder: (context) => AddAlimentoPage(nombreUsuario: widget.nombreUsuario)));
   }
 
   _navigateEditarUsuarioPage(BuildContext context) async {
@@ -217,7 +217,7 @@ onPressed: () {
             icon: Icon(Icons.search),
             onPressed: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => BuscadorComida()));
+                  MaterialPageRoute(builder: (context) => BuscadorComida(nombreUsuario: widget.nombreUsuario)));
             },
           )
           ),

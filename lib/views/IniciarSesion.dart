@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:my_app/controllers/databasehelpers.dart';
+import 'package:my_app/views/CrearUsuario.dart';
 import 'package:my_app/views/listviewfood.dart';
+import 'package:http/http.dart' as http;
+
+import '../model/Usuario.dart';
 
 class IniciarSesionPage extends StatefulWidget {
   @override
@@ -13,12 +19,25 @@ class _IniciarSesionPageState extends State<IniciarSesionPage> {
   final TextEditingController nombreController = TextEditingController();
   final TextEditingController nombreUsuarioController = TextEditingController();
 
+  Future<Usuario?> getUsuario(String nombreUsuario) async {
+    final response =
+        await http.get(Uri.parse('http://localhost:8080/users/$nombreUsuario'));
+
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+      return Usuario.fromJson(json);
+    } else {
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Iniciar Sesión'),
-        automaticallyImplyLeading: false, // esto evita que aparezca el botón de volver
+        automaticallyImplyLeading:
+            false, // esto evita que aparezca el botón de volver
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
@@ -44,16 +63,35 @@ class _IniciarSesionPageState extends State<IniciarSesionPage> {
             ),
             SizedBox(height: 32.0),
             ElevatedButton.icon(
-              onPressed: () {
-                // Lógica para crear la cuenta
-                dataBaseHelper.addUsuario(
-                  nombreController.text.trim(),
-                  nombreUsuarioController.text.trim(),
-                );
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ListAlimentos(nombreUsuario: nombreUsuarioController.text.trim())),
-                );
+              onPressed: () async {
+                // Lógica para iniciar sesión
+                final usuario =
+                    await getUsuario(nombreUsuarioController.text.trim());
+                if (usuario != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ListAlimentos(
+                            nombreUsuario:
+                                nombreUsuarioController.text.trim())),
+                  );
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text('Usuario incorrecto'),
+                      content: Text('Usuario o contraseña incorrecto'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('Cerrar'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
               },
               icon: Icon(Icons.check),
               label: Text('Iniciar sesión'),
@@ -66,10 +104,10 @@ class _IniciarSesionPageState extends State<IniciarSesionPage> {
             TextButton(
               onPressed: () {
                 // Lógica para ir a la página de inicio de sesión
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => IniciarSesionPage()),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CrearUsuarioPage()),
+                );
               },
               child: Text('No tienes cuenta? Crea tu propia cuenta!'),
             ),
