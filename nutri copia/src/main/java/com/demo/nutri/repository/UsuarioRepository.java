@@ -1,8 +1,11 @@
 package com.demo.nutri.repository;
 
-import com.demo.nutri.model.Usuario;
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
-public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
-    Usuario findByName(String name);
-}
+import org.springframework.data.repository.CrudRepository;
+
+import com.demo.nutri.model.Usuario;
+
+public interface UsuarioRepository extends CrudRepository<Usuario, String> {
+    List<Usuario> findByNombre(String nombre);
+   }
