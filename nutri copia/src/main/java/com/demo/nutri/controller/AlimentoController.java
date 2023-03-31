@@ -39,6 +39,11 @@ public class AlimentoController {
         return (List<Alimento>) repository.findAll();
     }
 
+    @GetMapping("/user/{nombreUsuario}")
+    public List<Alimento> getAlimentosUsuario(@PathVariable String nombreUsuario) {
+        return (List<Alimento>) repository.findByNombreUsuario(nombreUsuario);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<Alimento> createAlimento(@RequestBody Alimento Alimento) throws URISyntaxException {
         Alimento savedAlimento = repository.save(Alimento);
