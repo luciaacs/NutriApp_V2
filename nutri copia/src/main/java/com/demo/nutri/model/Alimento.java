@@ -13,6 +13,7 @@ public class Alimento {
     private Integer id;
     private String name;
     private Double cantidad;
+    private String unidadesCantidad; 
     private Double calorias;
     private Double grasas;
     private Double proteinas;
@@ -21,6 +22,12 @@ public class Alimento {
     private String nombreUsuario; 
 
 
+    public String getUnidadesCantidad() {
+        return unidadesCantidad;
+    }
+    public void setUnidadesCantidad(String unidadesCantidad) {
+        this.unidadesCantidad = unidadesCantidad;
+    }
     public String getNombreUsuario() {
         return nombreUsuario;
     }
