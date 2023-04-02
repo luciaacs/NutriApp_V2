@@ -17,6 +17,7 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController cantidadController = TextEditingController();
+  final TextEditingController unidadesCantidadController = TextEditingController();
   final TextEditingController caloriasController = TextEditingController();
   final TextEditingController grasasController = TextEditingController();
   final TextEditingController proteinasController = TextEditingController();
@@ -53,6 +54,17 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
             decoration: InputDecoration(
               labelText: 'cantidad',
               hintText: 'Product cantidad',
+              icon: new Icon(Icons.food_bank),
+            ),
+          ),
+        ),
+        Container(
+          height: 50,
+          child: TextField(
+            controller: cantidadController,
+            decoration: InputDecoration(
+              labelText: 'unidades de cantidad',
+              hintText: 'Product unidades de cantidad',
               icon: new Icon(Icons.food_bank),
             ),
           ),
@@ -127,6 +139,7 @@ class _AddAlimentoPageState extends State<AddAlimentoPage> {
                       dataBaseHelper.addAlimento(
                         nameController.text.trim(),
                         double.parse(cantidadController.text.trim()),
+                        unidadesCantidadController.text.trim(),
                         double.parse(caloriasController.text.trim()),
                         double.parse(grasasController.text.trim()),
                         double.parse(proteinasController.text.trim()),

@@ -1,10 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:my_app/controllers/databasehelpers.dart';
 import 'package:my_app/model/Usuario.dart';
 import 'package:my_app/views/listviewfood.dart';
-import 'package:http/http.dart' as http;
 
 class EditarUsuarioPage extends StatefulWidget {
   final String nombreUsuario;
@@ -22,9 +21,10 @@ class EditarUsuarioPage extends StatefulWidget {
 class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
   late Future<Usuario> _futureUsuario;
 
-  DataBaseHelper dataBaseHelper = DataBaseHelper();
-  final TextEditingController nombreController = TextEditingController();
-  final TextEditingController nombreUsuarioController = TextEditingController();
+  final dataBaseHelper = DataBaseHelper();
+  final nombreController = TextEditingController();
+  final nombreUsuarioController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   void initState() {
@@ -50,7 +50,7 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
         title: Text('Editar Usuario'),
       ),
       body: Container(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: FutureBuilder<Usuario>(
           future: _futureUsuario,
           builder: (context, snapshot) {
@@ -71,39 +71,57 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                   Text(
                     'Nombre de usuario',
                     style: TextStyle(
-                      fontSize: 16.0,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 8.0),
+                  const SizedBox(height: 8),
                   Text(
                     usuario.nombreUsuario,
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 16.0),
+                  const SizedBox(height: 16),
                   Text(
                     'Nombre',
                     style: TextStyle(
-                      fontSize: 16.0,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 8.0),
+                  const SizedBox(height: 8),
                   TextField(
                     controller: nombreController,
                     decoration: InputDecoration(
                       hintText: 'Ingresa tu nombre',
                     ),
                   ),
-                  const SizedBox(height: 16.0),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Password',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: passwordController,
+                    decoration: InputDecoration(
+                      hintText: 'Ingresa tu password',
+                    ),
+                    obscureText: true,
+                    textAlignVertical: TextAlignVertical.center,
+                  ),
+                  const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
                       dataBaseHelper.updateUsuario(
                         nombreController.text.trim(),
                         usuario.nombreUsuario,
+                        usuario.password,
                       );
                       Navigator.push(
                         context,

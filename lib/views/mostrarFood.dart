@@ -7,18 +7,22 @@ import 'package:http/http.dart' as http;
 class MostrarFood extends StatelessWidget {
   final String name;
   final double cantidad;
+  final String unidadesCantidad;
   final double calorias;
   final double grasas;
   final double proteinas;
   final double carbohidratos;
+  final String image;
 
   const MostrarFood({
     required this.name,
     required this.cantidad,
+    required this.unidadesCantidad,
     required this.calorias,
     required this.grasas,
     required this.proteinas,
     required this.carbohidratos,
+    required this.image,
   });
 
   @override
@@ -57,7 +61,7 @@ class MostrarFood extends StatelessWidget {
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                   title: Text(
-                    'Cantidad: $cantidad',
+                    'Cantidad: $cantidad $unidadesCantidad',
                     style: TextStyle(
                       fontSize: 18.0,
                     ),
@@ -72,6 +76,29 @@ class MostrarFood extends StatelessWidget {
                       fontSize: 18.0,
                     ),
                   ),
+                ),
+                FutureBuilder<http.Response>(
+                  future: http.get(Uri.parse(image)),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done &&
+                        snapshot.hasData &&
+                        snapshot.data!.statusCode == 200 &&
+                        ['http', 'https']
+                            .contains(Uri.parse(image).scheme)) {
+                      return FadeInImage.assetNetwork(
+                        placeholder: 'assets/placeholder_image.png',
+                        image: image,
+                        fit: BoxFit.cover,
+                      );
+                    } else {
+                      return Image.asset(
+                        'assets/placeholder_image.png',
+                        fit: BoxFit.cover,
+
+
+                      );
+                    }
+                  },
                 ),
               ],
             ),

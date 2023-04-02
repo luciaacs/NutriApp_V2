@@ -18,17 +18,21 @@ class _IniciarSesionPageState extends State<IniciarSesionPage> {
 
   final TextEditingController nombreController = TextEditingController();
   final TextEditingController nombreUsuarioController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
-  Future<Usuario?> getUsuario(String nombreUsuario) async {
+
+   Future<Usuario?> getUsuario(String nombreUsuario, String password) async {
     final response =
         await http.get(Uri.parse('http://localhost:8080/users/$nombreUsuario'));
 
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
-      return Usuario.fromJson(json);
-    } else {
-      return null;
+      final usuario = Usuario.fromJson(json);
+      if (usuario.password == password) {
+        return usuario;
+      }
     }
+    return null;
   }
 
   @override
@@ -44,29 +48,49 @@ class _IniciarSesionPageState extends State<IniciarSesionPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
-              controller: nombreController,
-              decoration: InputDecoration(
-                labelText: 'Nombre',
-                hintText: 'Nombre completo',
-                icon: Icon(Icons.person),
-              ),
-            ),
             SizedBox(height: 16.0),
             TextField(
               controller: nombreUsuarioController,
               decoration: InputDecoration(
                 labelText: 'Nombre de usuario',
-                hintText: 'nombredeusuario',
+                hintText: 'Introduzca su Nombre de usuario',
                 icon: Icon(Icons.email),
+              ),
+            ),
+            TextField(
+              controller: passwordController,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                hintText: 'Introduzca su password',
+                icon: Icon(Icons.password),
               ),
             ),
             SizedBox(height: 32.0),
             ElevatedButton.icon(
               onPressed: () async {
+                if (nombreUsuarioController.text.trim().isEmpty ||
+                    passwordController.text.trim().isEmpty ) {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text('Campos incompletos'),
+                      content: Text('Por favor completa la información.'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('Cerrar'),
+                        ),
+                      ],
+                    ),
+                  );
+                  return;
+                }
                 // Lógica para iniciar sesión
+
                 final usuario =
-                    await getUsuario(nombreUsuarioController.text.trim());
+                    await getUsuario(nombreUsuarioController.text.trim(), passwordController.text.trim());
                 if (usuario != null) {
                   Navigator.push(
                     context,
@@ -109,7 +133,7 @@ class _IniciarSesionPageState extends State<IniciarSesionPage> {
                   MaterialPageRoute(builder: (context) => CrearUsuarioPage()),
                 );
               },
-              child: Text('No tienes cuenta? Crea tu propia cuenta!'),
+              child: Text('¿No tienes cuenta? Crea tu propia cuenta!'),
             ),
           ],
         ),
