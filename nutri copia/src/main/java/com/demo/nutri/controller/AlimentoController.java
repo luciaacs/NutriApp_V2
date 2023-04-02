@@ -68,6 +68,7 @@ public class AlimentoController {
             alimento.setName(Alimento.getName());
             alimento.setCalorias(Alimento.getCalorias());
             alimento.setCantidad(Alimento.getCantidad());
+            alimento.setUnidadesCantidad(Alimento.getUnidadesCantidad());
             alimento.setCarbohidratos(Alimento.getCarbohidratos());
             alimento.setGrasas(Alimento.getGrasas());
             alimento.setProteinas(Alimento.getProteinas());
@@ -83,16 +84,4 @@ public class AlimentoController {
             return ResponseEntity.status(HttpStatus.CREATED).body(alimentoGuardado);
 }
 
-
-
-    // @PostMapping("/{id}/incrementa")
-    // ResponseEntity<Alimento> incrementa(@PathVariable Integer id) {
-    //     return repository.findById(id).map(
-    //             alimento -> {
-    //                 alimento.setStatus(alimento.getStatus() + 1);
-    //                 repository.save(alimento);
-    //                 return ResponseEntity.ok().body(alimento);
-    //             }).orElse(new ResponseEntity<Alimento>(HttpStatus.NOT_FOUND));
-
-    // }
 }

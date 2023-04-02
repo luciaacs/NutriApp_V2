@@ -61,6 +61,7 @@ public class UsuarioController {
     public ResponseEntity<Usuario>  updateUsuario(@PathVariable String id, @RequestBody Usuario Usuario) {
         return usuarioRepository.findById(id).map(usuario -> {
             usuario.setNombre(Usuario.getNombre());
+            usuario.setPassword(Usuario.getPassword());
             usuarioRepository.save(usuario);
             return ResponseEntity.ok().body(usuario);
         }).orElse(new ResponseEntity<Usuario>(HttpStatus.NOT_FOUND));
