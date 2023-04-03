@@ -13,16 +13,50 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
 
   final TextEditingController nombreController = TextEditingController();
   final TextEditingController nombreUsuarioController = TextEditingController();
+  final TextEditingController EdadController = TextEditingController();
+  final TextEditingController PesoController = TextEditingController();
+  final TextEditingController AlturaController = TextEditingController();
+
+  List<String> _alergiasSeleccionadas = [];
 
   @override
   Widget build(BuildContext context) {
+    var _generoSeleccionado;
+    var _nivelActividadSeleccionado;
+    List<Map<String, dynamic>> _alergias = [
+      {'titulo': 'Polen', 'valor': false},
+      {'titulo': 'Lactosa', 'valor': false},
+      {'titulo': 'Mariscos', 'valor': false},
+      {'titulo': 'Nueces', 'valor': false},
+    ];
+    List<CheckboxListTile> _crearAlergias() {
+      List<CheckboxListTile> alergias = [];
+
+      for (int i = 0; i < _alergias.length; i++) {
+        alergias.add(
+          CheckboxListTile(
+            title: Text(_alergias[i]['titulo']),
+            value: _alergias[i]['valor'],
+            onChanged: (bool? newValue) {
+              setState(() {
+                _alergias[i]['valor'] = newValue ?? false;
+              });
+            },
+          ),
+        );
+      }
+
+      return alergias;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Crear Usuario'),
-        automaticallyImplyLeading: false, // esto evita que aparezca el botón de volver
+        automaticallyImplyLeading:
+            false, // esto evita que aparezca el botón de volver
       ),
       body: Container(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -34,7 +68,7 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                 icon: Icon(Icons.person),
               ),
             ),
-            SizedBox(height: 16.0),
+            SizedBox(height: 10.0),
             TextField(
               controller: nombreUsuarioController,
               decoration: InputDecoration(
@@ -43,7 +77,100 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                 icon: Icon(Icons.email),
               ),
             ),
-            SizedBox(height: 32.0),
+            SizedBox(height: 10.0),
+            TextField(
+              controller: EdadController,
+              decoration: InputDecoration(
+                labelText: 'Edad',
+                icon: Icon(Icons.cake),
+              ),
+            ),
+            SizedBox(height: 10.0),
+            TextField(
+              controller: AlturaController,
+              decoration: InputDecoration(
+                labelText: 'Altura',
+                hintText: 'Altura en cm',
+                icon: Icon(Icons.height),
+              ),
+            ),
+            SizedBox(height: 10.0),
+            TextField(
+              controller: PesoController,
+              decoration: InputDecoration(
+                labelText: 'Peso',
+                hintText: 'Peso en kg',
+                icon: Icon(Icons.fitness_center),
+              ),
+            ),
+            SizedBox(height: 10.0),
+            DropdownButtonFormField(
+              decoration: InputDecoration(
+                labelText: 'Género',
+                icon: Icon(Icons.wc),
+              ),
+              value: _generoSeleccionado,
+              onChanged: (value) {
+                setState(() {
+                  _generoSeleccionado = value;
+                });
+              },
+              items: [
+                DropdownMenuItem(
+                  value: 'hombre',
+                  child: Text('Hombre'),
+                ),
+                DropdownMenuItem(
+                  value: 'mujer',
+                  child: Text('Mujer'),
+                ),
+              ],
+            ),
+            DropdownButtonFormField(
+              decoration: InputDecoration(
+                labelText: 'Nivel de actividad física',
+                icon: Icon(Icons.directions_run),
+              ),
+              value: _nivelActividadSeleccionado,
+              onChanged: (value) {
+                setState(() {
+                  _nivelActividadSeleccionado = value;
+                });
+              },
+              items: [
+                DropdownMenuItem(
+                  value: 'nada activo',
+                  child: Text('Nada activo'),
+                ),
+                DropdownMenuItem(
+                  value: 'poco activo',
+                  child: Text('Poco activo'),
+                ),
+                DropdownMenuItem(
+                  value: 'activo',
+                  child: Text('Activo'),
+                ),
+                DropdownMenuItem(
+                  value: 'muy activo',
+                  child: Text('Muy activo'),
+                ),
+              ],
+            ),
+            // CheckboxListTile para seleccionar alergias
+            Text(
+              'Alergias:',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 10.0,
+              ),
+            ),
+
+            SizedBox(height: 8.0),
+
+            Column(
+              children: _crearAlergias(),
+            ),
+
             ElevatedButton.icon(
               onPressed: () {
                 // Lógica para crear la cuenta
@@ -53,7 +180,9 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
                 );
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ListAlimentos(nombreUsuario: nombreUsuarioController.text.trim())),
+                  MaterialPageRoute(
+                      builder: (context) => ListAlimentos(
+                          nombreUsuario: nombreUsuarioController.text.trim())),
                 );
               },
               icon: Icon(Icons.check),
@@ -67,10 +196,10 @@ class _CrearUsuarioPageState extends State<CrearUsuarioPage> {
             TextButton(
               onPressed: () {
                 // Lógica para ir a la página de inicio de sesión
-                 Navigator.push(
-                   context,
-                   MaterialPageRoute(builder: (context) => IniciarSesionPage())
-                 );
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => IniciarSesionPage()));
               },
               child: Text('Ya tienes cuenta? Inicia sesión'),
             ),
